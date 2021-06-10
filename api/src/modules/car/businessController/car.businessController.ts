@@ -11,4 +11,8 @@ export class CarBusinessController {
         return this.carRepository.getAllCarsFromDb()
     }
 
+    public async addNewCar(car:any){
+        return this.carRepository.addNewCarToDb(car)
+    }
+
 }

@@ -10,6 +10,7 @@ import {
   NotEmpty,
   PrimaryKey,
   Table,
+  Unique,
 } from "sequelize-typescript";
 
 //Models
@@ -22,6 +23,7 @@ export interface CarI {
   model: string;
   color: string;
   year: Date;
+  patent: string;
   owner_id: number;
 }
 
@@ -64,6 +66,15 @@ export default class Car extends Model implements CarI {
     type: DataType.DATE,
   })
   year!: Date;
+
+  @AllowNull(false)
+  @NotEmpty
+  @Unique
+  @Column({
+    type: DataType.STRING,
+    unique: true
+  })
+  patent!: string;
 
   @ForeignKey(() => Owner)
   @Column({
