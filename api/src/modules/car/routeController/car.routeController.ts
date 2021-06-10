@@ -9,20 +9,28 @@ export class CarRoutesController {
   }
 
   public getAllCars = async (req: Request, res: Response) => {
-      try {
-          const allCars = await this.businessController.askForAllCars();
-          return res.status(200).send(allCars);
-      } catch (error) {
-        return res.status(400).send({ message: error.message });  
-      }
+    try {
+      const allCars = await this.businessController.askForAllCars();
+      return res.status(200).send(allCars);
+    } catch (error) {
+      return res.status(400).send({ message: error.message });
+    }
   };
 
   public getOneCar = async (req: Request, res: Response) => {
-    return res.status(200).send("getOneCar");
+    const { id } = req.params;
+    if (!id) return res.status(400).send({ message: ":id is mandatory" });
+
+    try {
+      const car = await this.businessController.askForOneCar(id);
+      return res.status(200).send(car);
+    } catch (error) {
+      return res.status(400).send({ message: error.message });
+    }
   };
 
-  public addNewCar = async (req: Request, res: Response) => {
-    const { brand, model, color, year ,patent} = req.body;
+  public createCar = async (req: Request, res: Response) => {
+    const { brand, model, color, year, patent } = req.body;
 
     if (!brand || !model || !color || !year || !patent)
       return res.status(400).send({ message: "All fields are mandatory" });
@@ -33,7 +41,7 @@ export class CarRoutesController {
         model,
         color,
         year: new Date(year.toString()),
-        patent
+        patent,
       });
       return res.status(200).send(response);
     } catch (error) {
@@ -42,10 +50,32 @@ export class CarRoutesController {
   };
 
   public updateCar = async (req: Request, res: Response) => {
-    return res.send("updateCar");
+    const { id } = req.params;
+    const { brand, model, color, year, patent } = req.body;
+    
+    try {
+        const resp = await this.businessController.updateCar({
+          brand,
+          model,
+          color,
+          year ,
+          patent,
+        },id);
+        return res.send(resp);   
+    } catch (error) {
+        return res.status(400).send({ message: error.message });
+    }
   };
 
   public deleteCar = async (req: Request, res: Response) => {
-    return res.send("deleteCar");
+    const { id } = req.params;
+    if (!id) return res.status(400).send({ message: ":id is mandatory" });
+
+    try {
+      const response = await this.businessController.deleteCar(id);
+      return res.status(200).send(response);
+    } catch (error) {
+      return res.status(400).send({ message: error.message });
+    }
   };
 }

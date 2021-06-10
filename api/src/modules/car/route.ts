@@ -15,7 +15,7 @@ export class Route {
         app.route('/cars/:id')
             .get(this.routeController.getOneCar);
         app.route('/cars')
-            .post(this.routeController.addNewCar)
+            .post(this.routeController.createCar)
         app.route('/cars/:id')
             .put(this.routeController.updateCar);
         app.route('/cars/:id')
